@@ -528,7 +528,7 @@ function itemfromRule(rule) {
 	}
 	
 	replacement.system.updateID = connectedItem.id;
-	
+
 	if (rule.toggleable) {
 		replacement.flags = {
 			[ModuleName] : {
@@ -537,7 +537,9 @@ function itemfromRule(rule) {
 					rule.actor.toggleRollOption(rule.domain, rule.option, connectedItem.id, !connectedItem.rules[ruleIndex].value);
 				}},
 				active : () => {return connectedItem.rules[ruleIndex].value},
-				toggleoptions : rule.suboptions?.map((option) => {return {value : option.value, name : game.i18n.localize(option.label)}}),
+				toggleoptions : rule.suboptions?.config == "skills" ?
+					Object.keys(CONFIG.PF2E.skills).map(key => ({value : key, name : game.i18n.localize(CONFIG.PF2E.skills[key].label)})) : 
+					rule.suboptions?.map?.((option) => {return {value : option.value, name : game.i18n.localize(option.label)}}),
 				onchange : (value) => {if (connectedItem) {
 					rule.actor.toggleRollOption(rule.domain, rule.option, connectedItem.id, connectedItem.rules[ruleIndex].value, value)
 				}},

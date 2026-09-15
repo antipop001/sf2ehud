@@ -1,3 +1,6 @@
+## v4.0.2
+- Fix for rule toggle "skills"
+
 ## v4.0.1
 - Fixed dailies staff compatibility
 

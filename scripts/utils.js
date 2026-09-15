@@ -56,7 +56,7 @@ async function getTooltipDetails(item) {
 		const system = dynamicstate ? dynamicstate.system({actor}) : item.system;
 		
 		title = dynamicstate ? dynamicstate.name({actor}) : item.name;
-		description = await TextEditor.enrichHTML(system.description.value)//, {async : true, processVisibility : false, rollData : {actor : item.actor, item : item}, secrets : true});
+		description = await (foundry.applications?.ux?.TextEditor?.implementation || TextEditor).enrichHTML(system.description.value)//, {async : true, processVisibility : false, rollData : {actor : item.actor, item : item}, secrets : true});
 		subtitle = system.traits.rarity ? game.i18n.localize("PF2E.Trait" + firstUpper(system.traits.rarity)) : "";
 		if (system?.level?.hasOwnProperty("value")) {
 			subtitle = subtitle + ` ${replacewords(game.i18n.localize("PF2E.LevelN"), {level : item.system.level.value})}`;
@@ -234,7 +234,7 @@ async function getTooltipDetails(item) {
 		}
 		
 		if (game.user.isGM) {
-			footerText = await TextEditor.enrichHTML(system.description.gm);
+			footerText = await (foundry.applications?.ux?.TextEditor?.implementation || TextEditor).enrichHTML(system.description.gm);
 		}
 	}
 
