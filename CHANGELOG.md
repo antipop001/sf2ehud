@@ -3,7 +3,9 @@
 - Retargeted module.json: id `enhancedcombathud-sf2e`, requires system `sf2e` (>= 1.6.0), Foundry 14
 - Module id renamed in `ModuleName` and all four language files
 - Code keyed on the system id now follows `game.system.id` instead of the literal `pf2e`: the `staminaVariant`/`proficiencyVariant` settings namespace, the `grantedBy`/`linkedWeapon` item flags, `systems/<id>/icons/...` paths and the actions compendium (`pf2e.actionspf2e` -> `sf2e.actions`; shared documents keep their ids)
-- Treat Wounds label falls back to `PF2E.Actions.TreatWounds.Label` because the sf2e actions pack does not carry that item (the rule and the system macro do exist)
+- Treat Wounds label falls back to `PF2E.Actions.TreatWounds.Label` if the compendium item is missing (it is present in sf2e 1.6.1's `sf2e.actions`)
+- Smoke-tested live on sf2e 1.6.1 / Foundry 14.369: HUD binds for an iconic PC and a bestiary NPC with zero page errors; skills (incl. Computers, Piloting), saves, perception and basic actions roll; weapon sets and tooltips render SF2e traits
+- Added `tools/deploy_smoke.sh` and Playwright smoke scripts under `tests/e2e/`
 - Elemental Blast proxy returns null when the kineticist API is absent
 
 ## v4.0.2

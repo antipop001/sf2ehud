@@ -1172,7 +1172,7 @@ Hooks.on("argonInit", async (CoreHUD) => {
 			const saves = this.actor.saves;
 			const skills = {perception : this.actor.perception, ...this.actor.skills};
 			const addSkillActions = [["treatWounds", {
-				name : fromUuidSync(actionUUID("1kGNdIIhuglAjIp9"))?.name ?? game.i18n.localize("PF2E.Actions.TreatWounds.Label"), //Treat Wounds is not in the sf2e actions pack, though the rule and the system macro exist
+				name : fromUuidSync(actionUUID("1kGNdIIhuglAjIp9"))?.name ?? game.i18n.localize("PF2E.Actions.TreatWounds.Label"), //defensive fallback if the compendium item is missing
 				slug : "treat-wounds",
 				section : "skill",
 				statistic : "medicine",
