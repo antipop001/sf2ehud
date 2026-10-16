@@ -1,12 +1,20 @@
 import {registerPF2EECHSItems, PF2EECHActionItems, PF2EECHFreeActionItems, PF2EECHReActionItems, trainedactions, itemfromRule} from "./specialItems.js";
-import {replacewords, ModuleName, sorttypes, sortdirections, getTooltipDetails, actionGlyphofItem, damageIcon, firstUpper, actioninfo, hasFeats, MAPtext, actionGlyphs, spelluseAction, itemconnectedAction, isClassFeature, connectedItem, connectedsettingAction, itemcanbetwoHanded, tabnames, sheettabbutton, itemfilter, actionfilter, sortfunction, connectedPassives, toggleFavourite, isFavourite, reloadWeapon, loadedAmmo, ammoCompatible} from "./utils.js";
+import {replacewords, ModuleName, systemPath, actionUUID, sorttypes, sortdirections, getTooltipDetails, actionGlyphofItem, damageIcon, firstUpper, actioninfo, hasFeats, MAPtext, actionGlyphs, spelluseAction, itemconnectedAction, isClassFeature, connectedItem, connectedsettingAction, itemcanbetwoHanded, tabnames, sheettabbutton, itemfilter, actionfilter, sortfunction, connectedPassives, toggleFavourite, isFavourite, reloadWeapon, loadedAmmo, ammoCompatible} from "./utils.js";
 import {openNewInput} from "./popupInput.js";                                                                                                                                                                                    
 import {elementalBlastProxy} from "./proxyfake.js";  
 import {createItemMacro} from "./macro.js";
 
 import {updateActionEffect} from "./compatibility/effects.js";                                                                                                                                                                      
 
-const defaultIcons = ["systems/pf2e/icons/actions/FreeAction.webp", "systems/pf2e/icons/actions/OneAction.webp", "systems/pf2e/icons/actions/OneThreeActions.webp", "systems/pf2e/icons/actions/OneTwoActions.webp", "systems/pf2e/icons/actions/Passive.webp", "systems/pf2e/icons/actions/Reaction.webp", "systems/pf2e/icons/actions/ThreeActions.webp", "systems/pf2e/icons/actions/TwoActions.webp", "systems/pf2e/icons/actions/TwoThreeActions.webp", "icons/sundries/books/book-red-exclamation.webp"]
+//system default icons; an item still carrying one of these gets a better icon from its linked item/effect
+//resolved lazily on init because the path depends on game.system.id (systems/pf2e/ or systems/sf2e/)
+const defaultIconNames = ["FreeAction", "OneAction", "OneThreeActions", "OneTwoActions", "Passive", "Reaction", "ThreeActions", "TwoActions", "TwoThreeActions"];
+let defaultIcons = [];
+Hooks.once("init", () => {
+	defaultIcons = defaultIconNames.map(name => systemPath(`icons/actions/${name}.webp`));
+	defaultIcons.push("icons/sundries/books/book-red-exclamation.webp"); //pf2e default feat/action icon
+	defaultIcons.push(systemPath("icons/default-icons/feats.webp"), systemPath("icons/default-icons/feats-sf2e.webp")); //sf2e swaps the book icon for these when it imports shared pf2e content
+});
 
 const maxactions = 3;
 const maxreactions = 1;
@@ -502,7 +510,7 @@ Hooks.on("argonInit", async (CoreHUD) => {
 			const DCText = game.i18n.localize("PF2E.Check.DC.Unspecific");
 
 			const hppercent = this.actor.system.attributes.hp.value/this.actor.system.attributes.hp.max;
-			const useStamina = (game.settings.get("pf2e", "staminaVariant") && (this.actor.system.attributes.hp.sp?.value > 0));
+			const useStamina = (game.settings.get(game.system.id, "staminaVariant") && (this.actor.system.attributes.hp.sp?.value > 0));
 			
 			const HPText = 	useStamina ?
 							game.i18n.localize("PF2E.StaminaPointsHeader").split(" ").map(text => text[0]).join("")
@@ -778,7 +786,7 @@ Hooks.on("argonInit", async (CoreHUD) => {
 				
 				let spHPbox;
 				let spHPvalue;
-				if (game.settings.get("pf2e", "staminaVariant") && this.actor.system.attributes.hp.sp) {
+				if (game.settings.get(game.system.id, "staminaVariant") && this.actor.system.attributes.hp.sp) {
 					spHPbox = document.createElement("div");
 					spHPbox.classList.add("portrait-stat-block");
 					spHPbox.style.display = "none";
@@ -820,13 +828,13 @@ Hooks.on("argonInit", async (CoreHUD) => {
 				
 				mainHPbox.onmouseenter = () => {
 					tempHPbox.style.display = "";
-					if (game.settings.get("pf2e", "staminaVariant") && this.actor.system.attributes.hp.sp) spHPbox.style.display = "";
+					if (game.settings.get(game.system.id, "staminaVariant") && this.actor.system.attributes.hp.sp) spHPbox.style.display = "";
 					currentHPvalue.style.display = "";
 					hpvaluebox.style.display = "none";
 					hptextbox.innerHTML = game.i18n.localize("PF2E.HitPointsShortLabel")
 					
 					tempHPvalue.value = this.actor.system.attributes.hp.temp;
-					if (game.settings.get("pf2e", "staminaVariant") && this.actor.system.attributes.hp.sp) spHPvalue.value = this.actor.system.attributes.hp.sp.value;
+					if (game.settings.get(game.system.id, "staminaVariant") && this.actor.system.attributes.hp.sp) spHPvalue.value = this.actor.system.attributes.hp.sp.value;
 					currentHPvalue.value = this.actor.system.attributes.hp.value;
 					
 					currentHPvalue.onchange();
@@ -834,21 +842,21 @@ Hooks.on("argonInit", async (CoreHUD) => {
 				
 				mainHPbox.onmouseleave = async () => {
 					tempHPbox.style.display = "none";
-					if (game.settings.get("pf2e", "staminaVariant") && this.actor.system.attributes.hp.sp) spHPbox.style.display = "none";
+					if (game.settings.get(game.system.id, "staminaVariant") && this.actor.system.attributes.hp.sp) spHPbox.style.display = "none";
 					currentHPvalue.style.display = "none";
 					hpvaluebox.style.display = "";
 					
-					if (tempHPvalue.value != this.actor.system.attributes.hp.temp || currentHPvalue.value != this.actor.system.attributes.hp.value || (game.settings.get("pf2e", "staminaVariant") && spHPvalue.value != this.actor.system.attributes.hp.sp.value)) {
+					if (tempHPvalue.value != this.actor.system.attributes.hp.temp || currentHPvalue.value != this.actor.system.attributes.hp.value || (game.settings.get(game.system.id, "staminaVariant") && spHPvalue.value != this.actor.system.attributes.hp.sp.value)) {
 						let update = {system : {attributes : {hp : {temp : tempHPvalue.value, value : currentHPvalue.value}}}};
 						
-						if (game.settings.get("pf2e", "staminaVariant") && this.actor.system.attributes.hp.sp) {
+						if (game.settings.get(game.system.id, "staminaVariant") && this.actor.system.attributes.hp.sp) {
 							update.system.attributes.hp.sp = {value : spHPvalue.value};
 						}
 						
 						await this.actor.update(update);
 					}
 					
-					const useStamina = (game.settings.get("pf2e", "staminaVariant") && (this.actor.system.attributes.hp.sp?.value > 0));
+					const useStamina = (game.settings.get(game.system.id, "staminaVariant") && (this.actor.system.attributes.hp.sp?.value > 0));
 					hptextbox.innerHTML = 	useStamina ?
 											game.i18n.localize("PF2E.StaminaPointsHeader").split(" ").map(text => text[0]).join("")
 											:
@@ -856,7 +864,7 @@ Hooks.on("argonInit", async (CoreHUD) => {
 				}
 				
 				mainHPbox.appendChild(tempHPbox);
-				if (game.settings.get("pf2e", "staminaVariant") && this.actor.system.attributes.hp.sp) mainHPbox.appendChild(spHPbox);
+				if (game.settings.get(game.system.id, "staminaVariant") && this.actor.system.attributes.hp.sp) mainHPbox.appendChild(spHPbox);
 				mainHPbox.appendChild(hpbox);
 				this.element.prepend(mainHPbox);
 			}
@@ -1164,7 +1172,7 @@ Hooks.on("argonInit", async (CoreHUD) => {
 			const saves = this.actor.saves;
 			const skills = {perception : this.actor.perception, ...this.actor.skills};
 			const addSkillActions = [["treatWounds", {
-				name : fromUuidSync("Compendium.pf2e.actionspf2e.Item.1kGNdIIhuglAjIp9").name,
+				name : fromUuidSync(actionUUID("1kGNdIIhuglAjIp9"))?.name ?? game.i18n.localize("PF2E.Actions.TreatWounds.Label"), //Treat Wounds is not in the sf2e actions pack, though the rule and the system macro exist
 				slug : "treat-wounds",
 				section : "skill",
 				statistic : "medicine",
@@ -1186,7 +1194,7 @@ Hooks.on("argonInit", async (CoreHUD) => {
 				let labelcolornumber = save.rank;
 				if (this.actor.type == "npc") {
 					let cleanedvalue = save.mod - this.actor.system.abilities[this.actor.system?.saves[saveKey]?.attribute]?.mod;
-					if (!game.settings.get("pf2e", "proficiencyVariant")) {
+					if (!game.settings.get(game.system.id, "proficiencyVariant")) {
 						cleanedvalue = cleanedvalue - this.actor.level;
 					}
 					labelcolornumber = Math.min(Math.max(Math.floor(cleanedvalue/2),0), 4);
@@ -1231,7 +1239,7 @@ Hooks.on("argonInit", async (CoreHUD) => {
 					let labelcolornumber = skill.rank;
 					if (this.actor.type == "npc") {
 						let cleanedvalue = skill.mod - this.actor.system.abilities[skill.attribute]?.mod;
-						if (!game.settings.get("pf2e", "proficiencyVariant")) {
+						if (!game.settings.get(game.system.id, "proficiencyVariant")) {
 							cleanedvalue = cleanedvalue - this.actor.level;
 						}
 						labelcolornumber = Math.min(Math.max(Math.floor(cleanedvalue/2),0), 4);
@@ -1657,7 +1665,7 @@ Hooks.on("argonInit", async (CoreHUD) => {
 		async _getButtons() {
 			//a = canvas.tokens.controlled[0].actor
 			//i = a.items.filter(i => i.name == "Rage" && i.type == "action")[0]
-			//id = i.getFlag("pf2e", "grantedBy").id
+			//id = i.getFlag(game.system.id, "grantedBy").id
 			//g = a.items.get(id)
 			//g.category == classfeature
 			//e = await fromUuid(i.system.selfEffect.uuid)
@@ -2364,7 +2372,7 @@ Hooks.on("argonInit", async (CoreHUD) => {
 							
 							if (!action) {
 								if (this.actor.type == "npc" && (this.item.type == "weapon" || this.item.type == "shield")) {//find melee item
-									let meleeitem = this.actor.items.find(item => item.flags?.pf2e?.linkedWeapon == this.item.id);
+									let meleeitem = this.actor.items.find(item => item.flags?.[game.system.id]?.linkedWeapon == this.item.id);
 									
 									if (meleeitem) {
 										action = connectedsettingAction(meleeitem);
@@ -2713,7 +2721,7 @@ Hooks.on("argonInit", async (CoreHUD) => {
 							await game.pf2e.actions.raiseAShield({actors : this.actor});
 							useAction(this.actionType);
 						},
-						tooltip : (await fromUuid("Compendium.pf2e.actionspf2e.Item.xjGwis0uaC2305pm")).name
+						tooltip : (await fromUuid(actionUUID("xjGwis0uaC2305pm")))?.name
 					};	
 
 					toggles.push(toggleData);
@@ -2754,7 +2762,7 @@ Hooks.on("argonInit", async (CoreHUD) => {
 					let isthrown = this.item.getFlag(ModuleName, "thrown");
 					
 					let toggleData = {
-						iconsource : "systems/pf2e/icons/mdi/thrown.svg",
+						iconsource : systemPath("icons/mdi/thrown.svg"),
 						greyed : !isthrown,
 						onclick : () => {this.item.setFlag(ModuleName, "thrown", !isthrown)},
 						tooltip : game.i18n.localize("PF2E.TraitThrown")
@@ -2771,7 +2779,7 @@ Hooks.on("argonInit", async (CoreHUD) => {
 					};	
 					
 					if (ismelee) {
-						toggleData.iconsource = "systems/pf2e/icons/mdi/sword.svg";
+						toggleData.iconsource = systemPath("icons/mdi/sword.svg");
 					}
 					else {
 						toggleData.iconclass = ["fa-solid", "fa-gun"];
@@ -4387,7 +4395,7 @@ Hooks.on("argonInit", async (CoreHUD) => {
 			
 			if (this.actor.skills.medicine.rank) {
 				buttons.push({
-					label: (await fromUuid("Compendium.pf2e.actionspf2e.Item.1kGNdIIhuglAjIp9")).name,
+					label: (await fromUuid(actionUUID("1kGNdIIhuglAjIp9")))?.name ?? game.i18n.localize("PF2E.Actions.TreatWounds.Label"),
 					onClick: (event) => game.pf2e.actions.treatWounds({actors : this.actor}),
 					icon: "fa-solid fa-kit-medical"
 				});

@@ -2,6 +2,9 @@
 - Forked from Saibot393/enhancedcombathud-pf2e v4.0.2
 - Retargeted module.json: id `enhancedcombathud-sf2e`, requires system `sf2e` (>= 1.6.0), Foundry 14
 - Module id renamed in `ModuleName` and all four language files
+- Code keyed on the system id now follows `game.system.id` instead of the literal `pf2e`: the `staminaVariant`/`proficiencyVariant` settings namespace, the `grantedBy`/`linkedWeapon` item flags, `systems/<id>/icons/...` paths and the actions compendium (`pf2e.actionspf2e` -> `sf2e.actions`; shared documents keep their ids)
+- Treat Wounds label falls back to `PF2E.Actions.TreatWounds.Label` because the sf2e actions pack does not carry that item (the rule and the system macro do exist)
+- Elemental Blast proxy returns null when the kineticist API is absent
 
 ## v4.0.2
 - Fix for rule toggle "skills"

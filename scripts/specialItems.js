@@ -1,4 +1,4 @@
-import { ModuleName, settingActionSpace, firstUpper, hasFlySpeed } from "./utils.js";
+import { ModuleName, settingActionSpace, firstUpper, hasFlySpeed, actionUUID } from "./utils.js";
 import {openNewInput} from "./popupInput.js";
 
 const ItemReplacementID = "_argonUI_";
@@ -157,10 +157,10 @@ async function registerPF2EECHSItems () {
 						
 						if (actor) {
 							if (actor.hasCondition("prone")) {
-								return (await fromUuid("Compendium.pf2e.actionspf2e.Item.OdIUybJ3ddfL7wzj")).sheet.render(true);
+								return (await fromUuid(actionUUID("OdIUybJ3ddfL7wzj"))).sheet.render(true);
 							}
 							else {
-								return (await fromUuid("Compendium.pf2e.actionspf2e.Item.HYNhdaPtF1QmQbR3")).sheet.render(true);
+								return (await fromUuid(actionUUID("HYNhdaPtF1QmQbR3"))).sheet.render(true);
 							}
 						}
 					},
@@ -358,10 +358,10 @@ async function registerPF2EECHSItems () {
 						
 						if (actor) {
 							if (hasFlySpeed(actor)) {
-								return (await fromUuid("Compendium.pf2e.actionspf2e.Item.qm7xptMSozAinnPS")).sheet.render(true);
+								return (await fromUuid(actionUUID("qm7xptMSozAinnPS"))).sheet.render(true);
 							}
 							else {
-								return (await fromUuid("Compendium.pf2e.actionspf2e.Item.3yoajuKjwHZ9ApUY")).sheet.render(true);
+								return (await fromUuid(actionUUID("3yoajuKjwHZ9ApUY"))).sheet.render(true);
 							}
 						}
 					},
@@ -407,7 +407,7 @@ async function registerPF2EECHSItems () {
 					itemset[itemkey].system = {};
 				}
 				
-				//let abilityItem = await fromUuid("Compendium.pf2e.actionspf2e.Item." + itemset[itemkey].id);
+				//let abilityItem = await fromUuid(actionUUID(itemset[itemkey].id));
 				let actionitem = game.pf2e.actions.get(itemset[itemkey].action);
 				if (actionitem) {
 					itemset[itemkey].name = game.i18n.localize(actionitem.name);
@@ -468,7 +468,7 @@ async function registerPF2EECHSItems () {
 					
 					if (!itemset[itemkey].flags[ModuleName].onrclick) {
 						itemset[itemkey].flags[ModuleName].onrclick = async (options) => {
-							let abilityItem = await fromUuid("Compendium.pf2e.actionspf2e.Item." + referid);
+							let abilityItem = await fromUuid(actionUUID(referid));
 							abilityItem?.sheet.render(true);
 						}
 					}
@@ -513,8 +513,8 @@ function itemfromRule(rule) {
 		let sourceitem = connectedItem;
 		
 		if (connectedItem.type == "action") {
-			if (connectedItem.getFlag("pf2e", "grantedBy")?.id) {
-				sourceitem = connectedItem.actor.items.get(connectedItem.getFlag("pf2e", "grantedBy").id);
+			if (connectedItem.getFlag(game.system.id, "grantedBy")?.id) {
+				sourceitem = connectedItem.actor.items.get(connectedItem.getFlag(game.system.id, "grantedBy").id);
 			}
 			if (!sourceitem) {
 				sourceitem = connectedItem;
@@ -559,7 +559,7 @@ async function getSettingActionOptions(category) {
 	}
 	
 	for (let key of Object.keys(settingActionIDs[category])) {
-		settingActionIDs[category][key] = (await fromUuid("Compendium.pf2e.actionspf2e.Item." + settingActionIDs[category][key]));
+		settingActionIDs[category][key] = (await fromUuid(actionUUID(settingActionIDs[category][key])));
 	}
 	
 	return await getSettingActionOptions();

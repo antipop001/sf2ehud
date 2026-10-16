@@ -6,6 +6,9 @@ A [Starfinder Second Edition](https://foundryvtt.com/packages/sf2e) port of the 
 
 <sup>All icon included in this project are from [Game-icons.net](game-icons.net), used under the [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/) license</sup>
 
+### Starfinder 2e port notes
+The Starfinder Second Edition system is built from the same code base as the Pathfinder 2e system, so the `game.pf2e` API and the `PF2E.*` localisation keys exist in both. This module uses `game.system.id` for everything that differs between them (settings namespace, item flags, `systems/<id>/` icon paths, the actions compendium) and should keep working on either system. Starfinder-specific rules support (Area Fire, Auto-Fire, computers/piloting skill actions, ...) is tracked in the CHANGELOG as it lands.
+
 ### The documentation for the core argon features can be found [here](https://api.theripper93.com/modulewiki/enhancedcombathud/free)
 
 This module adjust various Argon features for the Pathfinder 2e system:

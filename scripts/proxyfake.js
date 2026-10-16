@@ -5,6 +5,9 @@
 import { ModuleName } from "./utils.js";
 
 async function elementalBlastProxy(actor, elementalID) {
+	//kineticist only; the class (and so this API) may be absent, e.g. on the Starfinder 2e system
+	if (!game.pf2e?.ElementalBlast) return null;
+
 	let blast = new game.pf2e.ElementalBlast(actor);
 	let element = elementalID.split(".")[1];
 	

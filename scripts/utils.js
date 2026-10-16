@@ -2,6 +2,17 @@ import {openNewInput} from "./popupInput.js";
 
 const ModuleName = "enhancedcombathud-sf2e";
 
+// System-id helpers. The Pathfinder 2e ("pf2e") and Starfinder 2e ("sf2e") Foundry systems are
+// built from the same code base, so the game.pf2e API and the PF2E.* localisation keys exist in
+// both. What differs is everything keyed on the system id: the settings namespace, item flags
+// (flags.pf2e vs flags.sf2e), icon paths under systems/<id>/ and compendium pack names.
+// Use game.system.id directly for settings and flags, and these helpers for paths.
+const systemPath = (relative) => `systems/${game.system.id}/${relative}`;
+// The basic/skill actions compendium: "pf2e.actionspf2e" in PF2e, "sf2e.actions" in SF2e.
+// Documents shared between the two systems keep the same _id in both packs.
+const actionsPack = () => game.system.id == "pf2e" ? "pf2e.actionspf2e" : `${game.system.id}.actions`;
+const actionUUID = (id) => `Compendium.${actionsPack()}.Item.${id}`;
+
 const settingActionSpace = {
 	PF2EECHActionItems : 6,
 	PF2EECHFreeActionItems : 0,
@@ -563,8 +574,8 @@ function isClassFeature(item) {
 }
 
 function connectedItem(action) {
-	if (action.getFlag("pf2e", "grantedBy")) {
-		return action.actor.items.get(action.getFlag("pf2e", "grantedBy").id);
+	if (action.getFlag(game.system.id, "grantedBy")) {
+		return action.actor.items.get(action.getFlag(game.system.id, "grantedBy").id);
 	}
 	
 	return null;
@@ -824,4 +835,4 @@ function ammoCompatible(weapon, ammoId) {
 	return weapon.system?.ammo?.baseType == ammo.system?.baseItem;
 }
 
-export { ModuleName, settingActionSpace, sorttypes, sortdirections, tabnames, replacewords, getTooltipDetails, actionGlyphofItem, damageIcon, firstUpper, actioninfo, actionGlyphs, sheettabbutton, hasFeats, MAPtext, spelluseAction, itemconnectedAction, isClassFeature, connectedItem, connectedsettingAction, itemcanbetwoHanded, itemfilter, actionfilter, sortfunction, connectedPassives, toggleFavourite, isFavourite, hasFlySpeed, reloadWeapon, loadedAmmo, ammoCompatible}
+export {systemPath, actionsPack, actionUUID, ModuleName, settingActionSpace, sorttypes, sortdirections, tabnames, replacewords, getTooltipDetails, actionGlyphofItem, damageIcon, firstUpper, actioninfo, actionGlyphs, sheettabbutton, hasFeats, MAPtext, spelluseAction, itemconnectedAction, isClassFeature, connectedItem, connectedsettingAction, itemcanbetwoHanded, itemfilter, actionfilter, sortfunction, connectedPassives, toggleFavourite, isFavourite, hasFlySpeed, reloadWeapon, loadedAmmo, ammoCompatible}
