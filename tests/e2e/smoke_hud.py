@@ -5,7 +5,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 from _foundry import *
 
 OUT = os.environ.get("SF2E_SMOKE_OUT", "/tmp")
-WANT = sys.argv[1] if len(sys.argv) > 1 else ""
+WANT = os.environ.get("SF2E_SMOKE_ACTOR") or (sys.argv[1] if len(sys.argv) > 1 else "")
 MOD = "enhancedcombathud-sf2e"
 NOISE = ("hardware acceleration", "GL Driver Message", "GPU stall")
 
@@ -36,6 +36,13 @@ with sync_playwright() as pw:
     print('module active:', pg.evaluate("() => game.modules.get('enhancedcombathud-sf2e')?.active"))
 
     setup = pg.evaluate("""async (want) => {
+        const named = game.actors.getName(want);
+        if (named) {
+            const scene = game.scenes.active;
+            let tok = scene.tokens.find(t => t.actorId === named.id);
+            if (!tok) { const td = await named.getTokenDocument({x: scene.dimensions.sceneX + 1000, y: scene.dimensions.sceneY + 400}); [tok] = await scene.createEmbeddedDocuments('Token', [td.toObject()]); }
+            return {actor: named.name, level: named.level, cls: named.class?.name, id: named.id, token: tok.id, items: named.items.size, strikes: named.system.actions?.length};
+        }
         const pack = game.packs.get('sf2e.iconics');
         const idx = await pack.getIndex({fields: ['type', 'system.details.level.value']});
         let cand = idx.filter(e => e.type === 'character');

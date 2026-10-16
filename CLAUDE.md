@@ -16,5 +16,9 @@ Shared conventions live in `~/CLAUDE.md` (drive layout, `agy`, Ralph loops). Thi
 - Tests: `PLAYWRIGHT_BROWSERS_PATH=/mnt/project_data/playwright ~/.venvs/playwright/bin/python tests/e2e/<script>.py`
   - `smoke_hud.py [iconic]` enables the module, imports an iconic (default: lowest level), binds Argon, reports page errors, screenshots.
   - `probe_hud_detail.py` strikes/skills drawer/live rolls; `probe_sets_npc.py` weapon sets, tooltips, an NPC bind.
+  - `probe_spells.py` spell panels per action cost, slot/focus uses, tooltips, and casts through the HUD's own click actions (consumes slots; restore afterwards).
+  - **Target a specific actor** with `SF2E_SMOKE_ACTOR="<exact world actor name>"`; otherwise the probes use the first character.
+  - **Higher levels:** compendium iconics stop at level 7. `setup_leveled.py "Zemir (Level 7)" 10` imports a copy, raises it through the system's level-up path (class features, HP) and places its token. Spell slots, skill ranks, feats and gear stay at the source level: those are build choices, not something to invent. `list_iconics.py` / `iconic_classes.py` show what is available.
+- **Probe gotcha:** Argon builds panel buttons on demand (`await panel._getButtons()`), not in `_buttons`; a spell button's action is `_clickAction`. Bigger actors take longer to bind, so poll for `ui.ARGON._actor` and `components.drawer` instead of a fixed sleep.
 - **Gotchas:** v14 join field is `select[name="userId"]` and its options render after networkidle (wait for them). `page.screenshot` hangs on the WebGL canvas headless; capture via CDP `Page.captureScreenshot` (done in the scripts). Argon only binds on token control if enabled: call `ui.ARGON.toggle(true)`. `skipDialog` does not suppress the strike `CheckModifiersDialog`; race rolls with a timeout.
 - Player characters start with **empty weapon sets by design** (upstream only auto-fills NPCs); drag weapons in or set `flags.enhancedcombathud.weaponSets`.

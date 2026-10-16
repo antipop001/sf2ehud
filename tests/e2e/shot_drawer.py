@@ -2,6 +2,7 @@
 import sys, os, json, base64
 sys.path.insert(0, os.path.dirname(__file__))
 from _foundry import *
+WANT = os.environ.get('SF2E_SMOKE_ACTOR', '')
 OUT = os.environ.get("SF2E_SMOKE_OUT", "/tmp")
 SKILL = sys.argv[1] if len(sys.argv) > 1 else "athletics"
 def shot(pg, name):
@@ -10,12 +11,12 @@ def shot(pg, name):
 with sync_playwright() as pw:
     b, pg, errors = join(pw)
     pg.wait_for_timeout(2000)
-    pg.evaluate("""async () => {
+    pg.evaluate("""async (want) => {
         document.querySelectorAll('#notifications li, .notification').forEach(n => n.remove());
-        const actor = game.actors.find(a => a.type === 'character');
+        const actor = game.actors.find(a => a.type === 'character' && (!want || a.name === want));
         canvas.tokens.placeables.find(t => t.actor?.id === actor.id).control({releaseOthers: true});
         ui.ARGON.toggle(true); await new Promise(r => setTimeout(r, 4000));
-    }""")
+    }""", WANT)
     shot(pg, "icons_main")
     pg.locator(".ability-menu, .ech-drawer-header, .drawer-header, .portrait-hud .ability-title").first.click(timeout=5000) if pg.locator(".ability-menu, .ech-drawer-header, .drawer-header").count() else None
     pg.evaluate("() => { const h = [...document.querySelectorAll('#enhancedcombathud *')].find(e => /SAVES, CORE SKILLS/i.test(e.textContent) && e.children.length === 0); h?.click(); }")

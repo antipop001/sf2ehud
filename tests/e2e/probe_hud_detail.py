@@ -2,25 +2,26 @@
 import sys, os, json
 sys.path.insert(0, os.path.dirname(__file__))
 from _foundry import *
+WANT = os.environ.get('SF2E_SMOKE_ACTOR', '')
 NOISE = ("hardware acceleration", "GL Driver Message", "GPU stall")
 with sync_playwright() as pw:
     b, pg, errors = join(pw)
     pg.wait_for_timeout(2000); errors.clear()
-    r = pg.evaluate("""async () => {
-        const actor = game.actors.find(a => a.type === 'character');
+    r = pg.evaluate("""async (want) => {
+        const actor = game.actors.find(a => a.type === 'character' && (!want || a.name === want));
         const token = canvas.tokens.placeables.find(t => t.actor?.id === actor.id);
         token.control({releaseOthers: true}); ui.ARGON.toggle(true);
-        await new Promise(r => setTimeout(r, 4000));
+        for (let i = 0; i < 60 && !(ui.ARGON._actor?.id === actor.id && ui.ARGON.components.drawer && ui.ARGON.components.weaponSets); i++) await new Promise(r => setTimeout(r, 250)); await new Promise(r => setTimeout(r, 1000));
         const hud = ui.ARGON, out = {};
         out.strikes = actor.system.actions.map(s => [s.label, s.item?.type, s.item?.system?.traits?.value, s.ready]);
         out.weapons = actor.itemTypes.weapon.map(w => [w.name, w.id, w.isEquipped, w.system.equipped?.carryType, w.system.equipped?.handsHeld, w.system.traits.value]);
         const ws = hud.components.weaponSets;
-        try { out.setData = await Promise.race([ws.getSetData(), new Promise(r => setTimeout(() => r('timeout'), 5000))]); } catch (e) { out.setDataErr = String(e); }
+        try { const sd = await Promise.race([ws.getSetData(), new Promise(r => setTimeout(() => r('timeout'), 5000))]); out.setData = sd === 'timeout' ? sd : {active: sd.active, sets: Object.fromEntries(Object.entries(sd.sets).map(([k, v]) => [k, [v.primary?.name ?? null, v.secondary?.name ?? null]]))}; } catch (e) { out.setDataErr = String(e); }
         out.weaponSetFlag = actor.getFlag('enhancedcombathud', 'weaponSets') ?? actor.flags['enhancedcombathud-sf2e'];
         const drawer = hud.components.drawer;
         try { const cats = await Promise.race([drawer.categories, new Promise(r => setTimeout(() => r([]), 5000))]); out.drawer = cats.map(c => [c.categoryName ?? c.title ?? '?', (c.buttons ?? []).length]); } catch (e) { out.drawerErr = String(e); }
         out.skills = Object.keys(actor.skills);
-        out.mainButtons = (hud.components.main ?? []).map(p => [p.constructor.name, (p.buttons ?? []).map(b => b.label ?? b.item?.name ?? b.constructor.name)]);
+        out.mainButtons = (hud.components.main ?? []).map(p => [p.constructor.name, (p.buttons ?? []).map(b => { try { return b.item?.name ?? b.label ?? b.constructor.name; } catch { return '(empty ' + b.constructor.name + ')'; } })]);
         // live rolls through the same entry points the HUD buttons call
         const rolls = {};
         const roll = async (k, fn) => { try { const m = await Promise.race([fn(), new Promise((_, rej) => setTimeout(() => rej(new Error('timeout 8s (dialog?)')), 8000))]); rolls[k] = m ? 'ok' : 'no-message'; } catch (e) { rolls[k] = 'ERR ' + e; } document.querySelectorAll('dialog, .application.dialog').forEach(d => d.querySelector('[data-action=close], .header-control.close')?.click()); };
@@ -35,7 +36,7 @@ with sync_playwright() as pw:
         out.rolls = rolls;
         out.sf2eOnlyActions = ['access-infosphere','hack','operate-device','navigate','plot-course','stunt','drive','take-control','run-over','stop','area-fire','auto-fire'].map(s => [s, !!game.pf2e.actions.get(s)]);
         return out;
-    }""")
+    }""", WANT)
     print(json.dumps(r, indent=1)[:6000])
     print("errors:", json.dumps([e for e in errors if not any(n in e for n in NOISE)], indent=1))
     b.close()

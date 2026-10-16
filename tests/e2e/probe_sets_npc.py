@@ -2,6 +2,7 @@
 import sys, os, json, base64
 sys.path.insert(0, os.path.dirname(__file__))
 from _foundry import *
+WANT = os.environ.get('SF2E_SMOKE_ACTOR', '')
 OUT = os.environ.get("SF2E_SMOKE_OUT", "/tmp")
 NOISE = ("hardware acceleration", "GL Driver Message", "GPU stall", "V1 Application framework")
 def shot(pg, name):
@@ -10,14 +11,14 @@ def shot(pg, name):
 with sync_playwright() as pw:
     b, pg, errors = join(pw)
     pg.wait_for_timeout(2000); errors.clear()
-    pc = pg.evaluate("""async () => {
+    pc = pg.evaluate("""async (want) => {
         const T = (p, ms=6000) => Promise.race([p, new Promise(r => setTimeout(() => r('timeout'), ms))]);
-        const actor = game.actors.find(a => a.type === 'character');
+        const actor = game.actors.find(a => a.type === 'character' && (!want || a.name === want));
         const pistol = actor.itemTypes.weapon[0];
         await actor.setFlag('enhancedcombathud', 'weaponSets', {1: {primary: pistol.uuid, secondary: null}});
         const token = canvas.tokens.placeables.find(t => t.actor?.id === actor.id);
         token.control({releaseOthers: true}); ui.ARGON.toggle(true);
-        await new Promise(r => setTimeout(r, 4000));
+        for (let i = 0; i < 60 && !(ui.ARGON._actor?.id === actor.id && ui.ARGON.components.drawer && ui.ARGON.components.weaponSets); i++) await new Promise(r => setTimeout(r, 250)); await new Promise(r => setTimeout(r, 1000));
         const hud = ui.ARGON, out = {};
         const sets = await T(hud.components.weaponSets._getSets());
         out.set1 = sets?.[1] ? [sets[1].primary?.name, sets[1].secondary?.name] : sets;
@@ -33,7 +34,7 @@ with sync_playwright() as pw:
         out.treatWoundsInPack = !!(await fromUuid('Compendium.sf2e.actions.Item.1kGNdIIhuglAjIp9'));
         out.medicineRank = actor.skills.medicine.rank;
         return out;
-    }""")
+    }""", WANT)
     print("PC:", json.dumps(pc, indent=1)[:5000])
     shot(pg, "sf2e_hud_pc_weaponset")
     npc = pg.evaluate("""async () => {
