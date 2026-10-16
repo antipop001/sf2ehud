@@ -3415,7 +3415,7 @@ Hooks.on("argonInit", async (CoreHUD) => {
 				case "toggle" : return `modules/${ModuleName}/icons/checklist.svg`;
 				case "spell": return "modules/enhancedcombathud/icons/svg/spell-book.svg";
 				case "feat": return "modules/enhancedcombathud/icons/svg/mighty-force.svg";
-				case "consumable": return "modules/enhancedcombathud/icons/svg/drink-me.svg";
+				case "consumable": return `modules/${ModuleName}/icons/vial.svg`;
 				case "action": return "modules/enhancedcombathud/icons/svg/mighty-force.svg";
 			}
 		}

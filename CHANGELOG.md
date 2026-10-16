@@ -6,6 +6,7 @@
 - Treat Wounds label falls back to `PF2E.Actions.TreatWounds.Label` if the compendium item is missing (it is present in sf2e 1.6.1's `sf2e.actions`)
 - Smoke-tested live on sf2e 1.6.1 / Foundry 14.369: HUD binds for an iconic PC and a bestiary NPC with zero page errors; skills (incl. Computers, Piloting), saves, perception and basic actions roll; weapon sets and tooltips render SF2e traits
 - Added `tools/deploy_smoke.sh` and Playwright smoke scripts under `tests/e2e/`
+- Sci-fi icon refresh borrowed from the Argon SFRPG (Starfinder 1e) HUD, visuals only: consumables category (vial), Seek (radar sweep), Step (move), Shove (bull), Create a Diversion (distraction), Demoralize (megaphone), Disable a Device (screwdriver), Administer First Aid (sticking plaster). No action, rule or behaviour changed
 - Elemental Blast proxy returns null when the kineticist API is absent
 
 ## v4.0.2

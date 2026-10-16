@@ -5,6 +5,7 @@ Shared conventions live in `~/CLAUDE.md` (drive layout, `agy`, Ralph loops). Thi
 - **What:** fork of `Saibot393/enhancedcombathud-pf2e` v4.0.2, retargeted to the Foundry `sf2e` system. Module id `enhancedcombathud-sf2e`. Work branch `sf2e`; `origin` = `antipop001/sf2ehud`, `upstream` = Saibot393.
 - **Key fact:** the sf2e system is built from the `foundryvtt/pf2e` repo, so `game.pf2e.*` and `PF2E.*` lang keys work unchanged. Anything keyed on the system id (settings namespace, `flags.<id>`, `systems/<id>/` paths, the actions pack) must go through `game.system.id` or the `systemPath()` / `actionUUID()` helpers in `scripts/utils.js`. Never write the literal `"pf2e"` for those.
 - **Rules authority:** NotebookLM "SF2E" `758a4ef0-88a2-49a8-bdba-bdad34058dcd` (use `nlm notebook query`; the `notebooklm` CLI hit a CSRF error 2026-10-16) and https://2e.aonsrd.com/.
+- **Starfinder 1e HUD (`Saibot393/enhancedcombathud-sfrpg`) is an aesthetics source only** (operator's rule, 2026-10-16): icons, colours, styling. Never take rules, actions, weapon-set behaviour or mechanics from it; SF1e rules differ from SF2e. Its CSS and `WeaponSets.hbs` encode SF1e's single-slot weapon sets, so they count as rules. Credit any borrowed icon in `icons/LICENSE.md`.
 - **No build step.** Plain ES modules; the gate is `node --check` on every script plus JSON validation, which `tools/deploy_smoke.sh` runs before deploying.
 
 ## Smoke server (foundrySB, CT 211 — shared with rt/wfvtt; details in `~/wfvtt/CLAUDE.md` §3)

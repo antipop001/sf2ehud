@@ -34,3 +34,17 @@ The following icons are included
 	-open-palm.svg
 - By [ DarkZaitzev](https://www.deviantart.com/darkzaitzev)
 	- big-gear.svg
+
+Added for the Starfinder 2e port, taken from the [Argon - Combat HUD (SFRPG)](https://github.com/Saibot393/enhancedcombathud-sfrpg) icon set (same Game-icons.net source and CC BY 3.0 license):
+- By [Lorc](https://lorcblog.blogspot.com/)
+	-radar-sweep.svg
+	-bull.svg
+	-screwdriver.svg
+	-sticking-plaster.svg
+- By [Delapouite](https://delapouite.com/)
+	-acoustic-megaphone.svg
+	-move.svg
+- By [DarkZaitzev](https://www.deviantart.com/darkzaitzev)
+	-distraction.svg
+- By [sbed](https://opengameart.org/content/95-game-icons)
+	-vial.svg

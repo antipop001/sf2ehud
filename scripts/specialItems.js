@@ -53,13 +53,13 @@ const settingActionNameReplace = {
 
 const settingActionIMGs = {
 	PF2EECHActionItems : {
-		"administerFirstAid"	: `modules/${ModuleName}/icons/first-aid-kit.svg`,
+		"administerFirstAid"	: `modules/${ModuleName}/icons/sticking-plaster.svg`,
 		"balance"				: `modules/${ModuleName}/icons/tightrope.svg`,
 		"commandAnAnimal"		: `icons/svg/pawprint.svg`,
 		"concealAnObject"		: `modules/${ModuleName}/icons/magic-hat.svg`,
-		"createADiversion"		: `modules/${ModuleName}/icons/firework-rocket.svg`,
-		"demoralize"			: `modules/${ModuleName}/icons/tear-tracks.svg`,
-		"disableDevice"			: `modules/${ModuleName}/icons/tinker.svg`,
+		"createADiversion"		: `modules/${ModuleName}/icons/distraction.svg`,
+		"demoralize"			: `modules/${ModuleName}/icons/acoustic-megaphone.svg`,
+		"disableDevice"			: `modules/${ModuleName}/icons/screwdriver.svg`,
 		"disarm"				: `modules/${ModuleName}/icons/drop-weapon.svg`,
 		//"escape"				: "SkZAQRkLLkmBQNB9",
 		"feint"					: `modules/${ModuleName}/icons/fencer.svg`,
@@ -72,9 +72,9 @@ const settingActionIMGs = {
 		"perform"				: `modules/${ModuleName}/icons/drama-masks.svg`,
 		"pickALock"				: `modules/${ModuleName}/icons/lockpicks.svg`,
 		"request"				: `modules/${ModuleName}/icons/open-palm.svg`,
-		"seek"					: `icons/svg/eye.svg`,
+		"seek"					: `modules/${ModuleName}/icons/radar-sweep.svg`,
 		"senseMotive"			: `modules/${ModuleName}/icons/psychic-waves.svg`,
-		"shove"					: `modules/enhancedcombathud/icons/shield-bash.webp`,
+		"shove"					: `modules/${ModuleName}/icons/bull.svg`,
 		"sneak"					: `modules/${ModuleName}/icons/ninja-mask.svg`,
 		"steal"					: `modules/${ModuleName}/icons/snatch.svg`,
 		"trip"					: `modules/${ModuleName}/icons/tripwire.svg`,
@@ -170,7 +170,7 @@ async function registerPF2EECHSItems () {
 		},
 		/*
 		Seek : {
-			img: `icons/svg/eye.svg`,
+			img: `modules/${ModuleName}/icons/radar-sweep.svg`,
 			id: "BlAOM2X92SI6HMtJ"
 		},
 		SenseMotive : {
@@ -197,7 +197,7 @@ async function registerPF2EECHSItems () {
 					}
 				}
 			},
-			img: `modules/${ModuleName}/icons/walk.svg`,
+			img: `modules/${ModuleName}/icons/move.svg`,
 			id: "UHpkTuCtyaPqiCAB",
 			action: "step"
 		},
