@@ -1,15 +1,19 @@
 {
-  "id": "enhancedcombathud-pf2e",
-  "title": "Argon - Combat HUD (PF2E)",
-  "description": "An Argon version for the Pathfinder second edition System",
+  "id": "enhancedcombathud-sf2e",
+  "title": "Argon - Combat HUD (SF2E)",
+  "description": "An Argon version for the Starfinder Second Edition system. Forked from Saibot393's Argon - Combat HUD (PF2E) v4.0.2.",
   "authors": [
     {
-    "name": "saibot"
+      "name": "antipop001"
+    },
+    {
+      "name": "saibot",
+      "flags": { "role": "original PF2E author" }
     }
   ],
-  "version": "4.0.2",
+  "version": "0.1.0",
   "compatibility": {
-    "minimum": "13",
+    "minimum": "14",
     "verified": "14"
   },
   "socket": "true",
@@ -40,29 +44,31 @@
     }
   ],
   "esmodules": [
-	"scripts/settings.js",
-	"scripts/pf2eui.js"
+    "scripts/settings.js",
+    "scripts/pf2eui.js"
   ],
   "relationships": {
-	"requires": [
-		{
-			"id": "enhancedcombathud",
-			"type": "module",
-			"compatibility": {}
-		}
-	],
-	"systems": [
-		{
-			"id": "pf2e",
-			"type": "system",
-			"compatibility": {}
-		}
-	]
+    "requires": [
+      {
+        "id": "enhancedcombathud",
+        "type": "module",
+        "compatibility": {}
+      }
+    ],
+    "systems": [
+      {
+        "id": "sf2e",
+        "type": "system",
+        "compatibility": {
+          "minimum": "1.6.0"
+        }
+      }
+    ]
   },
-  "url": "https://github.com/Saibot393/enhancedcombathud-pf2e",
-  "download": "https://github.com/Saibot393/enhancedcombathud-pf2e/archive/refs/tags/v4.0.2.zip",
-  "manifest": "https://github.com/Saibot393/enhancedcombathud-pf2e/releases/latest/download/module.json",
-  "readme": "https://github.com/Saibot393/enhancedcombathud-pf2e/blob/main/README.md",
-  "changelog": "https://github.com/Saibot393/enhancedcombathud-pf2e/blob/main/CHANGELOG.md",
+  "url": "https://github.com/antipop001/sf2ehud",
+  "download": "https://github.com/antipop001/sf2ehud/archive/refs/tags/v0.1.0.zip",
+  "manifest": "https://github.com/antipop001/sf2ehud/releases/latest/download/module.json",
+  "readme": "https://github.com/antipop001/sf2ehud/blob/sf2e/README.md",
+  "changelog": "https://github.com/antipop001/sf2ehud/blob/sf2e/CHANGELOG.md",
   "allowBugReporter": true
 }

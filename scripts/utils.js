@@ -1,6 +1,6 @@
 import {openNewInput} from "./popupInput.js";
 
-const ModuleName = "enhancedcombathud-pf2e";
+const ModuleName = "enhancedcombathud-sf2e";
 
 const settingActionSpace = {
 	PF2EECHActionItems : 6,

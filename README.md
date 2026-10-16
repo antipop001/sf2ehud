@@ -1,5 +1,5 @@
-# Argon-PF2E
-An implementation of the [Argon - Combat HUD](https://foundryvtt.com/packages/enhancedcombathud) (by [TheRipper93](https://theripper93.com/) and [Mouse0270](https://github.com/mouse0270)) for the [Pathfinder Second Edition](https://foundryvtt.com/packages/pf2e) system. The Argon Combat HUD (CORE) module is required for this module to work.
+# Argon-SF2E
+A [Starfinder Second Edition](https://foundryvtt.com/packages/sf2e) port of the [Argon - Combat HUD (PF2E)](https://github.com/Saibot393/enhancedcombathud-pf2e) module by [Saibot393](https://github.com/Saibot393), itself an implementation of the [Argon - Combat HUD](https://foundryvtt.com/packages/enhancedcombathud) (by [TheRipper93](https://theripper93.com/) and [Mouse0270](https://github.com/mouse0270)). The Argon Combat HUD (CORE) module is required for this module to work. Forked from upstream v4.0.2.
 
 ![image](https://github.com/Saibot393/enhancedcombathud-pf2e/assets/137942782/2be49f41-4358-4d2f-b1e9-8072ae77cfd1)
 ![image](https://github.com/Saibot393/enhancedcombathud-pf2e/assets/137942782/0fa0b68a-a2cb-4275-8e1b-af6417b17f0e)
@@ -41,6 +41,6 @@ The reload and unload actions as added by **[PF2e Ranged Combat](https://foundry
 
 #### Languages:
 
-The module contains an English, a German, a Polish (thanks to [Lioheart](https://github.com/Lioheart)), and a Brazilian Portuguese (thanks to [zengerbr](https://github.com/zengerbr)) translation. If you want additional languages to be supported [let me know](https://github.com/Saibot393/enhancedcombathud-pf2e/issues).
+The module contains an English, a German, a Polish (thanks to [Lioheart](https://github.com/Lioheart)), and a Brazilian Portuguese (thanks to [zengerbr](https://github.com/zengerbr)) translation. If you want additional languages to be supported [let me know](https://github.com/antipop001/sf2ehud/issues).
 
-**If you have suggestions, questions, or requests for additional features please [let me know](https://github.com/Saibot393/enhancedcombathud-pf2e/issues).**
+**If you have suggestions, questions, or requests for additional features please [let me know](https://github.com/antipop001/sf2ehud/issues).**

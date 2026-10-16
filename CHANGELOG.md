@@ -1,3 +1,8 @@
+## v0.1.0 (SF2E fork)
+- Forked from Saibot393/enhancedcombathud-pf2e v4.0.2
+- Retargeted module.json: id `enhancedcombathud-sf2e`, requires system `sf2e` (>= 1.6.0), Foundry 14
+- Module id renamed in `ModuleName` and all four language files
+
 ## v4.0.2
 - Fix for rule toggle "skills"
 
@@ -203,7 +208,7 @@
 - Added menu to change hp/temp hp (open by hovering over the hp display)
 - Added filter to only show available npc skills
 - Added "pseudo rank color" to npc skills & saves
-- Added api to use argon hud actions (`game.modules.get("enhancedcombathud-pf2e").api.useAction(actiontype, actionamount)`)
+- Added api to use argon hud actions (`game.modules.get("enhancedcombathud-sf2e").api.useAction(actiontype, actionamount)`)
 - Staff tooltips will now close when the staff spell panel is open(ed)
 - Update for Polish translation (thanks to [Lioheart](https://github.com/Lioheart))
 - Fixed bug that could prevent the pf2e [PF2e Ranged Combat](https://foundryvtt.com/packages/pf2e-ranged-combat) reload/unload options from showing up 
