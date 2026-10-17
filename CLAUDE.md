@@ -8,6 +8,13 @@ Shared conventions live in `~/CLAUDE.md` (drive layout, `agy`, Ralph loops). Thi
 - **Starfinder 1e HUD (`Saibot393/enhancedcombathud-sfrpg`) is an aesthetics source only** (operator's rule, 2026-10-16): icons, colours, styling. Never take rules, actions, weapon-set behaviour or mechanics from it; SF1e rules differ from SF2e. Its CSS and `WeaponSets.hbs` encode SF1e's single-slot weapon sets, so they count as rules. Credit any borrowed icon in `icons/LICENSE.md`.
 - **No build step.** Plain ES modules; the gate is `node --check` on every script plus JSON validation, which `tools/deploy_smoke.sh` runs before deploying.
 
+## Releasing
+
+- Bump `version` in `module.json` **and** the `download` URL's `/download/v<version>/module.zip` to match (the builder refuses a mismatch). `manifest` stays `.../releases/latest/download/module.json`.
+- `tools/build_release.py <outdir>` writes `module.zip` (runtime files only, `module.json` at the root) and a copy of `module.json`.
+- Commit, `git tag v<version>`, push the tag, then `gh release create v<version> -R antipop001/sf2ehud --target sf2e <outdir>/module.json <outdir>/module.zip`. Both assets are required: Foundry reads the manifest from the latest release and downloads the zip it names.
+- The fork's default branch is upstream's `main` (the PF2e code); the release is cut from `sf2e`.
+
 ## Smoke server (foundrySB, CT 211 — shared with rt/wfvtt; details in `~/wfvtt/CLAUDE.md` §3)
 
 - World **`sf2e-smoketest`**, system sf2e 1.6.1, Foundry 14.369, GM seat `Gamemaster` (no password). Argon core `enhancedcombathud` 5.0.1 is installed and enabled.

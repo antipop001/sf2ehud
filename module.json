@@ -66,7 +66,7 @@
     ]
   },
   "url": "https://github.com/antipop001/sf2ehud",
-  "download": "https://github.com/antipop001/sf2ehud/archive/refs/tags/v0.1.0.zip",
+  "download": "https://github.com/antipop001/sf2ehud/releases/download/v0.1.0/module.zip",
   "manifest": "https://github.com/antipop001/sf2ehud/releases/latest/download/module.json",
   "readme": "https://github.com/antipop001/sf2ehud/blob/sf2e/README.md",
   "changelog": "https://github.com/antipop001/sf2ehud/blob/sf2e/CHANGELOG.md",
