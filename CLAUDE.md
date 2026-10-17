@@ -13,6 +13,7 @@ Shared conventions live in `~/CLAUDE.md` (drive layout, `agy`, Ralph loops). Thi
 - Bump `version` in `module.json` **and** the `download` URL's `/download/v<version>/module.zip` to match (the builder refuses a mismatch). `manifest` stays `.../releases/latest/download/module.json`.
 - `tools/build_release.py <outdir>` writes `module.zip` (runtime files only, `module.json` at the root) and a copy of `module.json`.
 - Commit, `git tag v<version>`, push the tag, then `gh release create v<version> -R antipop001/sf2ehud --target sf2e <outdir>/module.json <outdir>/module.zip`. Both assets are required: Foundry reads the manifest from the latest release and downloads the zip it names.
+- **Verify a release by installing it with Foundry's own installer**, not by checking the URLs: restart Foundry (world drops to /setup), move the dev copy out of `Data/modules` to `/tmp` on the box, then `tests/e2e/install_from_manifest.py` (calls `game.installPackage` with the public manifest), relaunch the world, run the suites. This caught a real bug in 0.1.0: **a zip without explicit directory entries fails to install** ("The file scripts/settings.js ... does not exist") although every file is in it. `build_release.py` now writes them.
 - The fork's default branch is upstream's `main` (the PF2e code); the release is cut from `sf2e`.
 
 ## Smoke server (foundrySB, CT 211 — shared with rt/wfvtt; details in `~/wfvtt/CLAUDE.md` §3)

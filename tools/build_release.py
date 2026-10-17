@@ -16,8 +16,12 @@ n = 0
 with zipfile.ZipFile(zp, "w", zipfile.ZIP_DEFLATED, compresslevel=9) as z:
     for f in FILES:
         z.write(os.path.join(root, f), f); n += 1
+    # Explicit directory entries: Foundry's package installer fails without them
+    # ("The file scripts/settings.js ... does not exist"), even though every file is present.
     for d in DIRS:
-        for r, _, fs in os.walk(os.path.join(root, d)):
+        for r, dirs, fs in os.walk(os.path.join(root, d)):
+            dirs.sort()
+            z.writestr(zipfile.ZipInfo(os.path.relpath(r, root) + "/"), ""); n += 1
             for f in sorted(fs):
                 if f.endswith((".pyc",)) or f.startswith("."): continue
                 p = os.path.join(r, f); z.write(p, os.path.relpath(p, root)); n += 1
